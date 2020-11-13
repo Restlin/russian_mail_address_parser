@@ -17,6 +17,10 @@ use yii\db\ActiveRecord;
  */
 class File extends ActiveRecord
 {
+    const STATUS_NONE = 0;
+    const STATUS_WORK = 1;
+    const STATUS_DONE = 2;
+    const STATUS_ERROR = 3;
     /**
      * статус ожидания обработки
      */
