@@ -2,8 +2,8 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=mail',
-    'username' => 'root',
+    'dsn' => 'pgsql:host=localhost;dbname=mail',
+    'username' => 'postgres',
     'password' => '',
     'charset' => 'utf8',
     'on afterOpen' => fn($event) => $event->sender->createCommand("set datestyle = 'German,DMY'")->execute(),
