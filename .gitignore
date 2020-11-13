@@ -34,4 +34,4 @@ tests/_support/_generated
 
 /files
 
-.composer.lock
+composer.lock
