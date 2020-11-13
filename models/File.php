@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\services\FileService;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -20,6 +21,14 @@ class File extends ActiveRecord
     const STATUS_WORK = 1;
     const STATUS_DONE = 2;
     const STATUS_ERROR = 3;
+    /**
+     * статус ожидания обработки
+     */
+    const STATUS_WAIT = 0;
+    /**
+     * статус обработан
+     */
+    const STATUS_COMPLETE = 1;
     /**
      * {@inheritdoc}
      */
@@ -53,5 +62,35 @@ class File extends ActiveRecord
             'size' => 'Размер',
             'status' => 'Статус обработки файла',
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        // TODO вынести в EventDispatcher
+        $container = Yii::$container;
+        try {
+            $service = $container->get(FileService::class);
+            $service->createDir($this);
+        } catch (\Exception $exception) {
+            Yii::error($exception->getMessage());
+        }
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        // TODO вынести в EventDispatcher
+        $container = Yii::$container;
+        try {
+            $service = $container->get(FileService::class);
+            $service->deleteFile($this);
+        } catch (\Exception $exception) {
+            Yii::error($exception->getMessage());
+        }
     }
 }
