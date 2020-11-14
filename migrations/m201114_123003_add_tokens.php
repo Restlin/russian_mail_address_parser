@@ -19,6 +19,12 @@ class m201114_123003_add_tokens extends Migration {
         foreach ($tokens as $token) {
             $this->insert('token', ['value' => mb_strtolower($token)]);
         }
+
+        $file = fopen('./migrations/data/data.csv', 'r');
+        while ($row = fgetcsv($file)) {
+            $this->insert('token', ['value' => mb_strtolower($row[0])]);
+        }
+        fclose($file);
     }
 
     /**
