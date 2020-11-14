@@ -77,8 +77,6 @@ $clone->pagination = false;
                 },
                 'format' => 'html',
             ],
-            'size',
-            'status',
             [
                 'attribute' => 'status',
                 'filter' => File::getStatuses(),
