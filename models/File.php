@@ -52,12 +52,12 @@ class File extends ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id' => 'ID Файла',
+            'id' => 'ИД Файла',
             'name' => 'Наименование файла',
             'mime' => 'MIME тип',
             'size' => 'Размер',
             'status' => 'Статус обработки файла',
-            'user_id' => 'ID пользователя',
+            'user_id' => 'ИД пользователя',
         ];
     }
 
