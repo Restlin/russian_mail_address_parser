@@ -82,11 +82,12 @@ class FileController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $model = $this->findModel($id);
         if ($model->user_id != $this->user->id) {
             throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
         }
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -98,10 +99,11 @@ class FileController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id) {
+        $model = $this->findModel($id);
         if ($model->user_id != $this->user->id) {
             throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
         }
-        $this->findModel($id)->delete();
+        $model->delete();
 
         return $this->redirect(['index']);
     }
