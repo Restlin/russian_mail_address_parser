@@ -17,7 +17,7 @@ class m201114_123003_add_tokens extends Migration {
         ]);
         $tokens = $this->actionLoad();
         foreach ($tokens as $token) {
-            $this->insert('token', ['value' => $token]);
+            $this->insert('token', ['value' => mb_strtolower($token)]);
         }
     }
 
