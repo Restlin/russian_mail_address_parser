@@ -18,7 +18,7 @@ class FileParserJob  extends \yii\base\BaseObject implements \yii\queue\JobInter
      */
     public $fileId;
     public function execute($queue) {
-        $file = File::findOne($this->fileId);
+        $file = File::findOne($this->fileId);        
         if(!$file) {
             return false;
         }
@@ -34,7 +34,7 @@ class FileParserJob  extends \yii\base\BaseObject implements \yii\queue\JobInter
         }
         $handle = fopen($filepath, "r");
         if ($handle) {
-            while (($content = fgets($handle, 4096)) !== false) {
+            while (($content = fgets($handle, 4096)) !== false) {                
                 $this->createRow($content);
             }            
             fclose($handle);
@@ -43,6 +43,7 @@ class FileParserJob  extends \yii\base\BaseObject implements \yii\queue\JobInter
         }
         return true;
     }
+    
     private function createRow(string $content) {
         $row = new Row();
         $row->content = $content;
@@ -50,6 +51,6 @@ class FileParserJob  extends \yii\base\BaseObject implements \yii\queue\JobInter
         $row->status = Row::STATUS_WORK;
         if($row->save()) {
             Yii::$app->queue->push(new RowParserJob(['rowId' => $row->id]));
-        }
+        }        
     }
 }
