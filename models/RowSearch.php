@@ -101,6 +101,6 @@ class RowSearch extends Row
             group by file.id
         ) t");
         $result = $command->queryOne();
-        return $result['avg'] ?? 0;
+        return round($result['avg']) ?? 0;
     }
 }
