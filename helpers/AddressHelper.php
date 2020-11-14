@@ -24,7 +24,7 @@ class AddressHelper {
         }
         $result = [];
         foreach($columns as $column) {
-            $elements = preg_split('\/s\ui', $column);
+            $elements = preg_split('/\s/ui', $column);
             foreach($elements as $element) {
                 if(in_array($element, $addressParts)) {
                     $result[] = $column;
