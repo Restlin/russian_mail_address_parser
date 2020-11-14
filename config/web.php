@@ -80,6 +80,12 @@ $config = [
         ],
     ],
     'params' => $params,
+    'modules' => [
+        'gridview' => [
+            'class' => '\kartik\grid\Module',
+            'downloadAction' => 'gridview/export/download',
+        ],
+    ],
 ];
 
 if (YII_ENV_DEV) {
