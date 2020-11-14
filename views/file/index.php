@@ -73,7 +73,7 @@ $clone->pagination = false;
             [
                 'attribute' => 'name',
                 'value' => function (File $model) {
-                    return in_array($model->status, [File::STATUS_NONE, File::STATUS_WORK]) ? $model->name : Html::a($model->name, ['view', 'id' => $model->id]);
+                    return Html::a($model->name, ['view', 'id' => $model->id]);
                 },
                 'format' => 'html',
             ],
