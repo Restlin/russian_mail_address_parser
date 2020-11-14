@@ -3,22 +3,43 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\FileSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use yii\web\View;
+use app\models\FileSearch;
+use yii\data\ActiveDataProvider;
+use yii\bootstrap\Modal;
+
+/* @var $this View */
+/* @var $searchModel FileSearch */
+/* @var $dataProvider ActiveDataProvider */
+/* @var $uploadForm string */
 
 $this->title = 'Файлы';
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerJs("
+    $('#modal-upload-files').on('hidden.bs.modal', function (e) {
+        $.pjax.reload({container: '#grid-view-files'});
+    });
+");
+
 ?>
 <div class="file-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Загрузить файл', ['upload'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
+        Modal::begin([
+            'id' => 'modal-upload-files',
+            'header' => '<h3>Загрузка файлов</h3>',
+            'toggleButton' => ['label' => 'Загрузить файлы', 'class' => 'btn btn-success'],
+        ]);
 
-    <?php Pjax::begin(); ?>
+        echo $uploadForm;
+
+        Modal::end();
+    ?>
+
+    <?php Pjax::begin(['id' => 'grid-view-files']); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -26,9 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'name',
-            'mime',
             'size',
             'status',
 
