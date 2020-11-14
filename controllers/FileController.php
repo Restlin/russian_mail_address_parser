@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\jobs\FileParserJob;
 use app\models\File;
 use app\models\FileSearch;
+use app\models\RowSearch;
 use app\models\User;
 use app\services\FileService;
 use Yii;
@@ -86,8 +87,14 @@ class FileController extends Controller {
         if ($model->user_id != $this->user->id) {
             throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
         }
+        $searchModel = new RowSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('view', [
             'model' => $model,
+            'rows' => $this->renderPartial('/row/index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]),
         ]);
     }
 
