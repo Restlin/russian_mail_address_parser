@@ -34,7 +34,7 @@ class UserIdentity implements IdentityInterface {
     }
 
     public static function findIdentityByUsername(string $username): ?UserIdentity {
-        $user = User::findOne(['email' => $username]);
+        $user = User::findOne(['email' => $username, 'active' => true]);
         return $user ? new self($user) : null;
     }
 

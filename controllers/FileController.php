@@ -5,12 +5,15 @@ namespace app\controllers;
 use app\jobs\FileParserJob;
 use app\models\File;
 use app\models\FileSearch;
+use app\models\User;
 use app\services\FileService;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -20,12 +23,14 @@ use yii\web\UploadedFile;
  */
 class FileController extends Controller {
 
+    private ?User $user = null;
     private FileService $fileService;
 
     public function __construct($id, $module,
             FileService $fileService,
             $config = []) {
         $this->fileService = $fileService;
+        $this->user = Yii::$app->user->getIsGuest() ? null : Yii::$app->user->identity->getUser();
         parent::__construct($id, $module, $config);
     }
 
@@ -40,6 +45,16 @@ class FileController extends Controller {
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'delete', 'download', 'upload'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -49,12 +64,14 @@ class FileController extends Controller {
      */
     public function actionIndex() {
         $searchModel = new FileSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel->load(Yii::$app->request->queryParams);
+        $searchModel->user_id = $this->user->id;
+        $dataProvider = $searchModel->search([]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'uploadForm' => $this->renderPartial('upload'),
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'uploadForm' => $this->renderPartial('upload'),
         ]);
     }
 
@@ -65,6 +82,9 @@ class FileController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        if ($model->user_id != $this->user->id) {
+            throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
+        }
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);
@@ -78,6 +98,9 @@ class FileController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id) {
+        if ($model->user_id != $this->user->id) {
+            throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
+        }
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -89,6 +112,9 @@ class FileController extends Controller {
      */
     public function actionDownload($id) {
         $model = $this->findModel($id);
+        if ($model->user_id != $this->user->id) {
+            throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
+        }
         $filePath = $this->fileService->getFilePath($model);
         Yii::$app->response->xSendFile($filePath, $model->name, [
             'mimeType' => $model->mime,
@@ -115,6 +141,7 @@ class FileController extends Controller {
                 $model->mime = mime_content_type($file->tempName);
                 $model->size = filesize($file->tempName);
                 $model->status = File::STATUS_NONE;
+                $model->user_id = $this->user->id;
 
                 if ($model->save()) {
                     $filePath = $this->fileService->getFilePath($model);

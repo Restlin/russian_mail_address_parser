@@ -21,39 +21,43 @@ $this->registerJs("
         $.pjax.reload({container: '#grid-view-files'});
     });
 ");
-
 ?>
 <div class="file-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php
-        Modal::begin([
-            'id' => 'modal-upload-files',
-            'header' => '<h3>Загрузка файлов</h3>',
-            'toggleButton' => ['label' => 'Загрузить файлы', 'class' => 'btn btn-success'],
-        ]);
+    Modal::begin([
+        'id' => 'modal-upload-files',
+        'header' => '<h3>Загрузка файлов</h3>',
+        'toggleButton' => ['label' => 'Загрузить файлы', 'class' => 'btn btn-success'],
+    ]);
 
-        echo $uploadForm;
+    echo $uploadForm;
 
-        Modal::end();
+    Modal::end();
     ?>
 
     <?php Pjax::begin(['id' => 'grid-view-files']); ?>
 
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+            [
+                'class' => yii\grid\SerialColumn::class
+            ],
             'name',
             'size',
             'status',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => yii\grid\ActionColumn::class,
+                'template' => '{delete}'
+            ],
         ],
-    ]); ?>
+    ]);
+    ?>
 
     <?php Pjax::end(); ?>
 
