@@ -159,4 +159,9 @@ class SiteController extends Controller {
         ]);
     }
 
+    public function actionStats()
+    {
+        return $this->render('stats', []);
+    }
+
 }

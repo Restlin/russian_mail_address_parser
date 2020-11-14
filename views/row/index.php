@@ -56,6 +56,7 @@ $clone->pagination = false;
                 'attribute' => 'status',
                 'filter' => Row::getStatuses(),
                 'value' => fn(Row $model) => $model->getStatusName(),
+                'format' => 'html',
             ],
             [
                 'class' => yii\grid\ActionColumn::class,

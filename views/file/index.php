@@ -81,6 +81,7 @@ $clone->pagination = false;
                 'value' => function (File $model) {
                     return $model->getStatusName();
                 },
+                'format' => 'html',
             ],
             [
                 'label' => 'Прогресс',
