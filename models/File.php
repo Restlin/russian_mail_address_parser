@@ -15,6 +15,7 @@ use app\models\Row;
  * @property string $mime MIME тип
  * @property int $size Размер
  * @property int $status Статус обработки файла
+ * @property int $user_id ID Пользователя
  *
  * @property Row[] $rows строки файла
  */
@@ -24,6 +25,8 @@ class File extends ActiveRecord {
     const STATUS_WORK = 1;
     const STATUS_DONE = 2;
     const STATUS_ERROR = 3;
+    const STATUS_WRONG_TYPE = 4;
+    const STATUS_WRONG_ENCODING = 5;
 
     /**
      * {@inheritdoc}
