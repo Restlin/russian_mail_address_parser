@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use borales\extensions\phoneInput\PhoneInputValidator;
 use Yii;
 
 /**
@@ -36,16 +37,20 @@ class User extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['surname', 'name', 'email'], 'required'],
+            [['surname', 'name', 'email', 'phone'], 'required'],
             [['email_code_unixtime', 'pwd_reset_token_unixtime'], 'integer'],
             [['active', 'isAdmin'], 'boolean'],
             [['surname', 'name', 'patronymic', 'email', 'no_confirm_email'], 'string', 'max' => 50],
+
+            [['phone'], 'filter', 'filter' => fn($value) => $value ?: null],
             [['phone'], 'string', 'max' => 20],
+            [['phone'], 'unique'],
+            [['phone'], PhoneInputValidator::class],
+
             [['email_code'], 'string', 'max' => 6],
             [['password_hash'], 'string', 'max' => 64],
             [['pwd_reset_token'], 'string', 'max' => 32],
             [['email'], 'unique'],
-            [['phone'], 'unique'],
         ];
     }
 
