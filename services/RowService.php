@@ -11,7 +11,7 @@ class RowService {
 
     public function responseRow(Row $row) {
         if ($row->address_base === null) {
-            $addressParts = Token::getTokens(); //@todo сюда получить словарик токенов для адреса
+            $addressParts = Token::getTokens();
             $row->address_base = AddressHelper::findAddress($row->content, $addressParts);
         }
         /* @var $service PostApiService */
