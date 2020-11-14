@@ -10,6 +10,7 @@ use yii\base\BaseObject;
 use yii\base\InvalidArgumentException;
 use yii\helpers\FileHelper;
 use yii\base\Exception;
+use DateTime;
 
 final class FileService extends BaseObject
 {
@@ -100,7 +101,7 @@ final class FileService extends BaseObject
             unlink($fp);
         }
     }
-    
+
     public function recalcFile(File $file): void {
         $hasRowsForWork = false;
         foreach($file->rows as $row) {
@@ -110,6 +111,9 @@ final class FileService extends BaseObject
             }
         }
         $file->status = $hasRowsForWork ? File::STATUS_WORK : File::STATUS_DONE;
+        if ($file->status == File::STATUS_DONE) {
+            $file->date_end = (new DateTime())->format('d.m.Y H:i:s');
+        }
         $file->save();
     }
 }

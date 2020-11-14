@@ -1,6 +1,8 @@
 <?php
 
 use yii\db\Migration;
+use yii\db\ColumnSchemaBuilder;
+use yii\base\NotSupportedException;
 
 /**
  * Handles the creation of table `{{%file}}`.
@@ -18,6 +20,8 @@ class m201113_174141_create_file_table extends Migration
             'mime' => $this->string()->notNull()->comment('MIME тип'),
             'size' => $this->bigInteger()->notNull()->defaultValue(0)->comment('Размер'),
             'status' => $this->integer()->notNull()->defaultValue(0)->comment('Статус обработки файла'),
+            'date_start' => $this->timestampWithTimezone()->comment('Дата начала парсинга'),
+            'date_end' => $this->timestampWithTimezone()->comment('Дата завершения парсинга'),
         ]);
 
         if (!file_exists('files')) {
@@ -33,4 +37,15 @@ class m201113_174141_create_file_table extends Migration
     {
         $this->dropTable('{{%file}}');
     }
+
+    /**
+     * @param int|null $precision
+     * @return ColumnSchemaBuilder
+     * @throws NotSupportedException
+     */
+    private function timestampWithTimezone(int $precision = null): ColumnSchemaBuilder
+    {
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder('timestamp with time zone', $precision)->defaultExpression('NULL');
+    }
+
 }
