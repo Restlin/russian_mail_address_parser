@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'tokenLive' => 900,
     'adminUser' => [
         'email' => 'admin@bimit.ru',
         'name' => 'Админ',
