@@ -15,6 +15,7 @@ use app\models\Row;
  * @property string $mime MIME тип
  * @property int $size Размер
  * @property int $status Статус обработки файла
+ * @property int $user_id ID Пользователя
  *
  * @property Row[] $rows строки файла
  */
