@@ -22,7 +22,7 @@ class RowParserJob extends \yii\base\BaseObject implements \yii\queue\JobInterfa
 
     public function execute($queue) {
         $row = Row::findOne($this->rowId);
-        $addressParts = []; //@todo сюда получить словарик токенов для адреса
+        $addressParts = \app\models\Token::getTokens(); //@todo сюда получить словарик токенов для адреса
         $row->address_base = AddressHelper::findAddress($row->content, $addressParts);
         if (!$row || $row->address_base === null) {
             return false;
