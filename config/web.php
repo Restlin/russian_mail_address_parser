@@ -46,6 +46,13 @@ $config = [
             ],
         ],
         'db' => $db,
+        'queue' => [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db',
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'default', // Queue channel key
+            'mutex' => \yii\mutex\PgsqlMutex::class, // Mutex used to sync queries
+        ],
     ],
     'params' => $params,
 ];

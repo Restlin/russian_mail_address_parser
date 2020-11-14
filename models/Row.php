@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\File;
+use app\services\FileService;
 use Yii;
 
 /**
@@ -58,6 +59,22 @@ class Row extends \yii\db\ActiveRecord
             'address_new' => 'Адрес после обработки',
             'status' => 'Статус обработки',
         ];
+    }
+    
+    public function afterSave($insert, $changedAttributes) {
+        $container = Yii::$container;
+        /*@var $service FileService */
+        $service = $container->get(FileService::class);        
+        $service->recalcFile($this->file);
+        parent::afterSave($insert, $changedAttributes);
+    }
+    
+    public function afterDelete() {
+        $container = Yii::$container;
+        /*@var $service FileService */
+        $service = $container->get(FileService::class);        
+        $service->recalcFile($this->file);
+        parent::afterDelete();
     }
 
     /**
