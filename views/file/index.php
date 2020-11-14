@@ -2,11 +2,11 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
 use yii\web\View;
 use app\models\FileSearch;
 use yii\data\ActiveDataProvider;
 use yii\bootstrap\Modal;
+use restlin\pjaxindicator\PjaxIndicator as Pjax;
 
 /* @var $this View */
 /* @var $searchModel FileSearch */
