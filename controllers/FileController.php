@@ -120,7 +120,7 @@ class FileController extends Controller
                 $model->name = $file->name;
                 $model->mime = mime_content_type($file->tempName);
                 $model->size = filesize($file->tempName);
-                $model->status = File::STATUS_WAIT;
+                $model->status = File::STATUS_NONE;
 
                 if ($model->save()) {
                     $filePath = $this->fileService->getFilePath($model);
