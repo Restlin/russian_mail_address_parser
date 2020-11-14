@@ -9,7 +9,9 @@ use app\models\Row;
 /* @var $model Row */
 
 $this->title = 'Редактирование: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Обработанные строки', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = ['label' => 'Обработанные строки', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Файлы', 'url' => ['/file/index']];
+$this->params['breadcrumbs'][] = ['label' => $model->file->name, 'url' => ['/file/view', 'id' => $model->file->id]];
 $this->params['breadcrumbs'][] = 'Редактирование';
 ?>
 <div class="row-update">
