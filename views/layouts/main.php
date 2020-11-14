@@ -35,25 +35,18 @@ AppAsset::register($this);
                 ],
             ]);
             $user = Yii::$app->user->isGuest ?: Yii::$app->user->identity->getUser();
+            $items = [
+                ['label' => 'Домой', 'url' => ['/site/index']],
+            ];
+            if (Yii::$app->user->isGuest) {
+                $items[] = ['label' => 'Регистрация', 'url' => ['/site/registration']];
+                $items[] = ['label' => 'Войти', 'url' => ['/site/login']];
+            } else {
+                $items[] = ['label' => 'Выход (' . $user->surname . ' ' . $user->name . ')', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post', 'title' => 'Выход']];
+            }
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => [
-                    ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
-                    Yii::$app->user->isGuest ? (
-                            ['label' => 'Login', 'url' => ['/site/login']]
-                            ) : (
-                            '<li>'
-                            . Html::beginForm(['/site/logout'], 'post')
-                            . Html::submitButton(
-                                    'Logout (' . $user->surname . ' ' . $user->name . ')',
-                                    ['class' => 'btn btn-link logout']
-                            )
-                            . Html::endForm()
-                            . '</li>'
-                            )
-                ],
+                'items' => $items,
             ]);
             NavBar::end();
             ?>

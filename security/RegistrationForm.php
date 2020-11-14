@@ -3,6 +3,7 @@
 namespace app\security;
 
 use app\models\User;
+use borales\extensions\phoneInput\PhoneInputValidator;
 use Exception;
 use Yii;
 use yii\base\Model;
@@ -13,8 +14,6 @@ use yii\helpers\Url;
  * @author pky
  */
 class RegistrationForm extends Model {
-
-    private AvatarGenerator $avatarGenerator;
 
     /**
      * Пароль
@@ -53,6 +52,12 @@ class RegistrationForm extends Model {
     public string $name = '';
 
     /**
+     * Отчество
+     * @var string
+     */
+    public string $patronymic = '';
+
+    /**
      * Пользователь
      * @var User|null
      */
@@ -61,7 +66,7 @@ class RegistrationForm extends Model {
     public function rules() {
         return [
             [['email', 'surname', 'name', 'password', 'password_confirm'], 'required'],
-            [['email', 'surname', 'name'], 'string', 'max' => 50],
+            [['email', 'surname', 'name', 'patronymic'], 'string', 'max' => 50],
             [['phone'], 'string', 'max' => 20],
             [['phone'], PhoneInputValidator::class],
             [['password'], 'string', 'min' => 6, 'max' => 50],
@@ -97,6 +102,7 @@ class RegistrationForm extends Model {
             'phone' => 'Номер телефона',
             'surname' => 'Фамилия',
             'name' => 'Имя',
+            'patronymic' => 'Отчество',
             'password' => 'Пароль',
             'password_confirm' => 'Повторить пароль',
         ];
@@ -129,6 +135,7 @@ class RegistrationForm extends Model {
         $user->phone = $this->phone;
         $user->name = $this->name;
         $user->surname = $this->surname;
+        $user->patronymic = $this->patronymic;
         $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
         $user->email_code = str_pad(random_int(0, 999999), 6, 0, STR_PAD_LEFT);
         $user->email_code_unixtime = time();

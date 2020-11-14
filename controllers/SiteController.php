@@ -2,12 +2,16 @@
 
 namespace app\controllers;
 
+use app\security\ForgotForm;
+use app\security\LoginForm;
+use app\security\RegistrationForm;
+use app\security\ResetPwdForm;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\security\LoginForm;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class SiteController extends Controller {
 
