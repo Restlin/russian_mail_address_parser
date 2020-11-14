@@ -34,7 +34,7 @@ $this->title = 'Регистрация';
                 'class' => 'fieldin',
                 'autocomplete' => 'new-password'
             ]
-        ])->label('Номер телефона *')
+        ])
         ?>
         <?= $form->field($model, 'password')->passwordInput()->label($model->getAttributeLabel('password') . ' *') ?>
         <?= $form->field($model, 'password_confirm')->passwordInput()->label($model->getAttributeLabel('password_confirm') . ' *') ?>
