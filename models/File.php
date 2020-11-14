@@ -18,8 +18,8 @@ use app\models\Row;
  *
  * @property Row[] $rows строки файла
  */
-class File extends ActiveRecord
-{
+class File extends ActiveRecord {
+
     const STATUS_NONE = 0;
     const STATUS_WORK = 1;
     const STATUS_DONE = 2;
@@ -28,18 +28,16 @@ class File extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'file';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['name', 'mime'], 'required'],
+            [['name', 'mime', 'user_id'], 'required'],
             [['size', 'status'], 'default', 'value' => null],
             [['size', 'status'], 'integer'],
             [['name', 'mime'], 'string', 'max' => 255],
@@ -49,14 +47,14 @@ class File extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID Файла',
             'name' => 'Наименование файла',
             'mime' => 'MIME тип',
             'size' => 'Размер',
             'status' => 'Статус обработки файла',
+            'user_id' => 'ID пользователя'
         ];
     }
 
@@ -64,8 +62,7 @@ class File extends ActiveRecord
      * @param bool $insert
      * @param array $changedAttributes
      */
-    public function afterSave($insert, $changedAttributes)
-    {
+    public function afterSave($insert, $changedAttributes) {
         parent::afterSave($insert, $changedAttributes);
         // TODO вынести в EventDispatcher
         $container = Yii::$container;
@@ -77,8 +74,7 @@ class File extends ActiveRecord
         }
     }
 
-    public function afterDelete()
-    {
+    public function afterDelete() {
         parent::afterDelete();
         // TODO вынести в EventDispatcher
         $container = Yii::$container;
@@ -95,8 +91,8 @@ class File extends ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getRows()
-    {
+    public function getRows() {
         return $this->hasMany(Row::class, ['file_id' => 'id']);
     }
+
 }

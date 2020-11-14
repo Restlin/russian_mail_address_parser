@@ -9,15 +9,14 @@ use app\models\File;
 /**
  * FileSearch represents the model behind the search form of `app\models\File`.
  */
-class FileSearch extends File
-{
+class FileSearch extends File {
+
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['id', 'size', 'status'], 'integer'],
+            [['id', 'size', 'status', 'user_id'], 'integer'],
             [['name', 'mime'], 'safe'],
         ];
     }
@@ -25,8 +24,7 @@ class FileSearch extends File
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -38,8 +36,7 @@ class FileSearch extends File
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = File::find();
 
         // add conditions that should always apply here
@@ -61,11 +58,13 @@ class FileSearch extends File
             'id' => $this->id,
             'size' => $this->size,
             'status' => $this->status,
+            'user_id' => $this->user_id,
         ]);
 
         $query->andFilterWhere(['ilike', 'name', $this->name])
-            ->andFilterWhere(['ilike', 'mime', $this->mime]);
+                ->andFilterWhere(['ilike', 'mime', $this->mime]);
 
         return $dataProvider;
     }
+
 }
