@@ -16,7 +16,7 @@ class m201114_045056_add_user extends Migration {
             'surname' => $this->string(50)->notNull()->comment('Фамилия'),
             'name' => $this->string(50)->notNull()->comment('Имя'),
             'patronymic' => $this->string(50)->comment('Отчество'),
-            'phone' => $this->string(20)->notNull()->unique()->comment('Телефон'),
+            'phone' => $this->string(20)->unique()->comment('Телефон'),
             'email' => $this->string(50)->notNull()->unique()->comment('Email'),
             'no_confirm_email' => $this->string(50)->comment('Не подтверждённый email'),
             'email_code' => $this->string(6)->null()->comment('Код подтверждения Email'),
