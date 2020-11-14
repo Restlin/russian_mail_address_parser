@@ -43,7 +43,7 @@ $this->title = 'Регистрация';
         Поля, отмеченные звездочкой (*), обязательны для заполнения.
     </div>
     <div class="column">
-        <?= Html::submitButton('Зарегистрироваться') ?>
+        <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success']) ?>
     </div>
     <div class="column">
         <?= Html::a('У меня уже есть аккаунт, войти под ним', ['/site/login']) ?>
