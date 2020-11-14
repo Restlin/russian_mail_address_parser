@@ -60,19 +60,19 @@ class Row extends \yii\db\ActiveRecord
             'status' => 'Статус обработки',
         ];
     }
-    
+
     public function afterSave($insert, $changedAttributes) {
         $container = Yii::$container;
         /*@var $service FileService */
-        $service = $container->get(FileService::class);        
+        $service = $container->get(FileService::class);
         $service->recalcFile($this->file);
         parent::afterSave($insert, $changedAttributes);
     }
-    
+
     public function afterDelete() {
         $container = Yii::$container;
         /*@var $service FileService */
-        $service = $container->get(FileService::class);        
+        $service = $container->get(FileService::class);
         $service->recalcFile($this->file);
         parent::afterDelete();
     }
@@ -85,5 +85,27 @@ class Row extends \yii\db\ActiveRecord
     public function getFile()
     {
         return $this->hasOne(File::class, ['id' => 'file_id']);
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            static::STATUS_NONE => 'В очереди',
+            static::STATUS_WORK => 'В работе',
+            static::STATUS_DONE => 'Обработка завершена',
+            static::STATUS_ERROR => 'Ошибка обработки',
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusName(): string
+    {
+        $statuses = static::getStatuses();
+        return $statuses[$this->status] ?? 'Неверный статус';
     }
 }

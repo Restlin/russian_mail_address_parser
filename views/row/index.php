@@ -7,6 +7,7 @@ use app\models\RowSearch;
 use yii\data\ActiveDataProvider;
 use kartik\export\ExportMenu;
 use restlin\pjaxindicator\PjaxIndicator as Pjax;
+use app\models\Row;
 
 /* @var $this View */
 /* @var $searchModel RowSearch */
@@ -47,7 +48,13 @@ $this->title = 'Обработанные строки';
             'content:ntext',
             'address_base:ntext',
             'address_new:ntext',
-            'status',
+            [
+                'attribute' => 'status',
+                'filter' => Row::getStatuses(),
+                'value' => function (Row $model) {
+                    return $model->getStatusName();
+                },
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',

@@ -98,4 +98,28 @@ class File extends ActiveRecord {
         return $this->hasMany(Row::class, ['file_id' => 'id']);
     }
 
+    /**
+     * @return string[]
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            static::STATUS_NONE => 'В очереди',
+            static::STATUS_WORK => 'В работе',
+            static::STATUS_DONE => 'Обработка завершена',
+            static::STATUS_ERROR => 'Ошибка обработки',
+            static::STATUS_WRONG_TYPE => 'Неверный формат',
+            static::STATUS_WRONG_ENCODING => 'Неверная кодировка',
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusName(): string
+    {
+        $statuses = static::getStatuses();
+        return $statuses[$this->status] ?? 'Неверный статус';
+    }
+
 }

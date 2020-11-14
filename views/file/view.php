@@ -37,7 +37,10 @@ YiiAsset::register($this);
             'name',
             'mime',
             'size',
-            'status',
+            [
+                'attribute' => 'status',
+                'value' => $model->getStatusName(),
+            ],
         ],
     ]) ?>
 
