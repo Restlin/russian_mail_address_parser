@@ -1,16 +1,8 @@
 <?php
 
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace app\commands;
 
-use app\models\Row;
 use app\models\User;
-use app\services\PostApiService;
 use Yii;
 use yii\console\Controller;
 use yii\db\Exception;
