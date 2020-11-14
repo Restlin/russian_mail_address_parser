@@ -3,6 +3,12 @@
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 $container = require __DIR__ . '/container.php';
+$cookiesParams = [
+    'httpOnly' => true,
+    'sameSite' => PHP_VERSION_ID >= 70300 ? \yii\web\Cookie::SAME_SITE_STRICT : null,
+    'secure' => !YII_ENV_DEV,
+];
+
 
 $config = [
     'id' => 'basic',
@@ -12,19 +18,27 @@ $config = [
     'container' => $container,
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'gfCaW2s20fMZpZ_3GW0BNIXdse85BrZI',
+            'csrfCookie' => $cookiesParams,
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'session' => [
+            'cookieParams' => $cookiesParams,
+            'timeout' => 172800,
+        ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => app\security\UserIdentity::class,
             'enableAutoLogin' => true,
+            'authTimeout' => 172800,
+            'absoluteAuthTimeout' => 2592000,
+            'identityCookie' => array_merge(['name' => '_identity'], $cookiesParams),
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -62,15 +76,15 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+            // uncomment the following to add your IP if you are not connecting from localhost.
+            //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+            // uncomment the following to add your IP if you are not connecting from localhost.
+            //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
