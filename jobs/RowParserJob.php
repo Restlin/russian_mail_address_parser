@@ -4,6 +4,7 @@ namespace app\jobs;
 
 use app\models\Row;
 use Yii;
+use app\services\RowService;
 
 /**
  * Разбор строки
