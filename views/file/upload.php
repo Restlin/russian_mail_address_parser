@@ -36,7 +36,8 @@ use yii\helpers\Url;
         'layoutTemplates' => [
             'actionDownload' => '<a class="{downloadClass}" title="{downloadTitle}" href="{downloadUrl}" target="_blank" data-pjax="0">{downloadIcon}</a>',
         ],
-        'maxFileSize' => 102400,
+        //'maxFileSize' => 102400,
+        'allowedFileExtensions'=>['csv', 'xlsx'],
     ],
     'pluginEvents' => [
         'filebatchselected' => new JsExpression('function(event, files){$(this).fileinput("upload");}'),
