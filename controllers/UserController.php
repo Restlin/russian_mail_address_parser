@@ -2,12 +2,16 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\User;
 use app\models\UserSearch;
+use app\security\ChangePwdForm;
+use app\security\EmailConfirmForm;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -157,8 +161,8 @@ class UserController extends Controller {
             $model = new ChangePwdForm();
             if ($model->load(Yii::$app->request->post())) {
                 $model->validate();
-                Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
-                return \yii\widgets\ActiveForm::validate($model);
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
             }
         }
     }

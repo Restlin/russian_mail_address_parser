@@ -2,29 +2,29 @@
 
 namespace app\controllers;
 
-use app\services\FileService;
-use Yii;
+use app\jobs\FileParserJob;
 use app\models\File;
 use app\models\FileSearch;
+use app\services\FileService;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\web\UploadedFile;
-use app\jobs\FileParserJob;
 
 /**
  * FileController implements the CRUD actions for File model.
  */
-class FileController extends Controller
-{
+class FileController extends Controller {
+
     private FileService $fileService;
 
     public function __construct($id, $module,
-                                FileService $fileService,
-                                $config = []) {
+            FileService $fileService,
+            $config = []) {
         $this->fileService = $fileService;
         parent::__construct($id, $module, $config);
     }
@@ -32,8 +32,7 @@ class FileController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::class,
@@ -48,14 +47,13 @@ class FileController extends Controller
      * Lists all File models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new FileSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -65,10 +63,9 @@ class FileController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -79,8 +76,7 @@ class FileController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -90,8 +86,7 @@ class FileController extends Controller
      * @param $id
      * @throws NotFoundHttpException
      */
-    public function actionDownload($id)
-    {
+    public function actionDownload($id) {
         $model = $this->findModel($id);
         $filePath = $this->fileService->getFilePath($model);
         Yii::$app->response->xSendFile($filePath, $model->name, [
@@ -103,8 +98,7 @@ class FileController extends Controller
     /**
      * @return array
      */
-    public function actionUpload()
-    {
+    public function actionUpload() {
         $request = Yii::$app->request;
         if ($request->isPost) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -123,7 +117,7 @@ class FileController extends Controller
 
                 if ($model->save()) {
                     $filePath = $this->fileService->getFilePath($model);
-                    if($file->saveAs($filePath)) {
+                    if ($file->saveAs($filePath)) {
                         Yii::$app->queue->push(new FileParserJob(['fileId' => $model->id]));
                     }
                     $downloadUrl = urldecode(Url::to(['/file/download', 'id' => $model->id]));
@@ -153,12 +147,12 @@ class FileController extends Controller
      * @return File the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id): File
-    {
+    protected function findModel($id): File {
         if (($model = File::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('Запрашиваемая страница не найдена.');
     }
+
 }
