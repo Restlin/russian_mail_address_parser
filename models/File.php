@@ -15,7 +15,7 @@ use app\models\Row;
  * @property string $mime MIME тип
  * @property int $size Размер
  * @property int $status Статус обработки файла
- * 
+ *
  * @property Row[] $rows строки файла
  */
 class File extends ActiveRecord
@@ -24,14 +24,7 @@ class File extends ActiveRecord
     const STATUS_WORK = 1;
     const STATUS_DONE = 2;
     const STATUS_ERROR = 3;
-    /**
-     * статус ожидания обработки
-     */
-    const STATUS_WAIT = 0;
-    /**
-     * статус обработан
-     */
-    const STATUS_COMPLETE = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -96,7 +89,7 @@ class File extends ActiveRecord
             Yii::error($exception->getMessage());
         }
     }
-    
+
     /**
      * Gets query for [[Row]].
      *
