@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Row;
 use yii\data\Sort;
+use yii\db\Expression;
 
 /**
  * RowSearch represents the model behind the search form of `app\models\Row`.
@@ -43,10 +44,24 @@ class RowSearch extends Row
     {
         $query = Row::find();
 
+        $query->addSelect(["*", new Expression('CASE WHEN status = :done THEN 1 ELSE 0 END AS "customStatusSort"', ['done' => Row::STATUS_DONE])]);
+
         // add conditions that should always apply here
         $sort = new Sort([
-            'attributes' => ['id', 'file_id', 'status', 'content', 'address_base', 'address_new'],
-            'defaultOrder' => ['id' => SORT_DESC],
+            'attributes' => [
+                'id',
+                'file_id',
+                'status' => [
+                    'asc' => ['customStatusSort' => SORT_DESC, 'status' => SORT_ASC],
+                    'desc' => ['customStatusSort' => SORT_DESC, 'status' => SORT_DESC],
+                    'default' => SORT_ASC,
+                ],
+                'content',
+                'address_base',
+                'address_new',
+                'customStatusSort',
+            ],
+            'defaultOrder' => ['status' => SORT_DESC, 'id' => SORT_DESC],
         ]);
 
         $dataProvider = new ActiveDataProvider([

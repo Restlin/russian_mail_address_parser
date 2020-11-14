@@ -57,7 +57,7 @@ class File extends ActiveRecord {
             'mime' => 'MIME тип',
             'size' => 'Размер',
             'status' => 'Статус обработки файла',
-            'user_id' => 'ID пользователя'
+            'user_id' => 'ID пользователя',
         ];
     }
 
@@ -120,6 +120,30 @@ class File extends ActiveRecord {
     {
         $statuses = static::getStatuses();
         return $statuses[$this->status] ?? 'Неверный статус';
+    }
+
+    /**
+     * @return int
+     */
+    private function getCountCompleteRows(): int
+    {
+        return Row::find()->andWhere(['file_id' => $this->id, 'status' => [Row::STATUS_DONE, Row::STATUS_ERROR]])->count();
+    }
+
+    /**
+     * @return int
+     */
+    private function getCountAllRows(): int
+    {
+        return Row::find()->andWhere(['file_id' => $this->id])->count();
+    }
+
+    public function getProgress(): int
+    {
+        if ($this->getCountAllRows() && $this->getCountCompleteRows()) {
+            return floor(($this->getCountCompleteRows() / $this->getCountAllRows()) * 100);
+        }
+        return 0;
     }
 
 }

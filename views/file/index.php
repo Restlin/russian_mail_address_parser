@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap\Html;
 use yii\grid\GridView;
 use yii\web\View;
 use app\models\FileSearch;
@@ -81,6 +81,22 @@ $clone->pagination = false;
                 'value' => function (File $model) {
                     return $model->getStatusName();
                 },
+            ],
+            [
+                'label' => 'Прогресс',
+                'value' => function (File $model) {
+                    $progress = $model->getProgress();
+                    $completeText = Html::tag('span', $progress . '% Complete', ['class' => 'sr-only']);
+                    return Html::tag('div', Html::tag('div', $completeText, [
+                        'class' => 'progress-bar  active ' . ($progress == 100 ? 'progress-bar-success' : 'progress-bar-striped'),
+                        'role' => 'progressbar',
+                        'aria-valuenow' => $progress,
+                        'aria-valuemin' => 0,
+                        'aria-valuemax' => 100,
+                        'style' => 'width: ' . $progress . '%',
+                    ]), ['class' => 'progress']);
+                },
+                'format' => 'html',
             ],
             [
                 'class' => yii\grid\ActionColumn::class,
