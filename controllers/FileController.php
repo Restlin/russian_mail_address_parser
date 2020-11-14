@@ -13,6 +13,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\web\UploadedFile;
+use app\jobs\FileParserJob;
 
 /**
  * FileController implements the CRUD actions for File model.
@@ -122,7 +123,9 @@ class FileController extends Controller
 
                 if ($model->save()) {
                     $filePath = $this->fileService->getFilePath($model);
-                    $file->saveAs($filePath);
+                    if($file->saveAs($filePath)) {
+                        Yii::$app->queue->push(new FileParserJob(['fileId' => $model->id]));
+                    }
                     $downloadUrl = urldecode(Url::to(['/file/download', 'id' => $model->id]));
                     $response['initialPreview'][] = Html::img($downloadUrl);
                     $response['initialPreviewConfig'][] = [

@@ -5,6 +5,7 @@ namespace app\services;
 
 use Yii;
 use app\models\File;
+use app\models\Row;
 use yii\base\BaseObject;
 use yii\base\InvalidArgumentException;
 use yii\helpers\FileHelper;
@@ -98,5 +99,17 @@ final class FileService extends BaseObject
         if (file_exists($fp)) {
             unlink($fp);
         }
+    }
+    
+    public function recalcFile(File $file): void {
+        $hasRowsForWork = false;
+        foreach($file->rows as $row) {
+            if(in_array($row->status, [Row::STATUS_WORK, Row::STATUS_NONE])) {
+                $hasRowsForWork = true;
+                break;
+            }
+        }
+        $file->status = $hasRowsForWork ? File::STATUS_WORK : File::STATUS_DONE;
+        $file->save();
     }
 }

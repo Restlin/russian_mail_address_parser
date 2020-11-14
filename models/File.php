@@ -5,6 +5,7 @@ namespace app\models;
 use app\services\FileService;
 use Yii;
 use yii\db\ActiveRecord;
+use app\models\Row;
 
 /**
  * This is the model class for table "file".
@@ -14,6 +15,8 @@ use yii\db\ActiveRecord;
  * @property string $mime MIME тип
  * @property int $size Размер
  * @property int $status Статус обработки файла
+ * 
+ * @property Row[] $rows строки файла
  */
 class File extends ActiveRecord
 {
@@ -92,5 +95,15 @@ class File extends ActiveRecord
         } catch (\Exception $exception) {
             Yii::error($exception->getMessage());
         }
+    }
+    
+    /**
+     * Gets query for [[Row]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRows()
+    {
+        return $this->hasMany(Row::class, ['file_id' => 'id']);
     }
 }

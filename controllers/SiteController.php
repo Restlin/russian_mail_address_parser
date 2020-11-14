@@ -61,7 +61,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->redirect(['file/index']); //@todo подумать над центральной страницей
+        //return $this->render('index');
     }
 
     /**
