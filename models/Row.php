@@ -40,7 +40,7 @@ class Row extends \yii\db\ActiveRecord
         return [
             [['file_id', 'content'], 'required'],
             [['file_id', 'status'], 'default', 'value' => null],
-            [['file_id', 'status'], 'integer'],
+            [['file_id', 'status', 'id'], 'integer'],
             [['content', 'address_base', 'address_new'], 'string', 'max' => 5000],
             [['file_id'], 'exist', 'skipOnError' => true, 'targetClass' => File::class, 'targetAttribute' => ['file_id' => 'id']],
         ];

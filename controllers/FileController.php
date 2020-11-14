@@ -86,9 +86,8 @@ class FileController extends Controller {
         $model = $this->findModel($id);
         if ($model->user_id != $this->user->id) {
             throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
-        } elseif (in_array($model->status, [File::STATUS_NONE, File::STATUS_WORK])) {
-            throw new ForbiddenHttpException('Обработка файла не завершена!');
         }
+
         $searchModel = new RowSearch(['file_id' => $model->id]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('view', [
@@ -111,9 +110,8 @@ class FileController extends Controller {
         $model = $this->findModel($id);
         if ($model->user_id != $this->user->id) {
             throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
-        } elseif (in_array($model->status, [File::STATUS_NONE, File::STATUS_WORK])) {
-            throw new ForbiddenHttpException('Обработка файла не завершена!');
         }
+
         $model->delete();
 
         return $this->redirect(['index']);
