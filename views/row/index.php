@@ -45,7 +45,6 @@ $clone->pagination = false;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'content:ntext',

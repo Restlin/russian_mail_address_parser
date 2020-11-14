@@ -42,7 +42,7 @@ class File extends ActiveRecord {
         return [
             [['name', 'mime', 'user_id'], 'required'],
             [['size', 'status'], 'default', 'value' => null],
-            [['size', 'status'], 'integer'],
+            [['size', 'status', 'id'], 'integer'],
             [['name', 'mime'], 'string', 'max' => 255],
         ];
     }

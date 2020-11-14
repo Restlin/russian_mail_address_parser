@@ -67,9 +67,7 @@ $clone->pagination = false;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            [
-                'class' => yii\grid\SerialColumn::class
-            ],
+            'id',
             [
                 'attribute' => 'name',
                 'value' => function (File $model) {
