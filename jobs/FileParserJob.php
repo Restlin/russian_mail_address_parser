@@ -5,6 +5,7 @@ use app\models\File;
 use app\models\Row;
 use app\services\FileService;
 use Yii;
+use DateTime;
 
 /**
  * Разбор файла в строки
@@ -27,6 +28,7 @@ class FileParserJob  extends \yii\base\BaseObject implements \yii\queue\JobInter
         $service = $container->get(FileService::class);
 
         $file->status = File::STATUS_WORK;
+        $file->date_start = (new DateTime())->format('d.m.Y H:i:s');
 
         $filepath = $service->getFilePath($file);
         if(file_exists($filepath)) {
@@ -35,6 +37,7 @@ class FileParserJob  extends \yii\base\BaseObject implements \yii\queue\JobInter
                 $encoding = $this->getEncoding($filepath);
                 if(!$encoding) {
                     $file->status = File::STATUS_WRONG_ENCODING;
+                    $file->date_end = (new DateTime())->format('d.m.Y H:i:s');
                 } elseif($encoding != 'utf-8') {
                     $tmppath = "/tmp/$file->id.csv";
                     exec("iconv -f $encoding -t utf-8 $filepath -o $tmppath");
@@ -46,13 +49,16 @@ class FileParserJob  extends \yii\base\BaseObject implements \yii\queue\JobInter
                 $filepath = $tmppath;
             } else {
                 $file->status = File::STATUS_WRONG_TYPE;
+                $file->date_end = (new DateTime())->format('d.m.Y H:i:s');
             }
         } else {
             $file->status = File::STATUS_ERROR;
+            $file->date_end = (new DateTime())->format('d.m.Y H:i:s');
         }
 
         if($file->status == File::STATUS_WORK && !$this->parseFile($filepath)) {
             $file->status = File::STATUS_ERROR;
+            $file->date_end = (new DateTime())->format('d.m.Y H:i:s');
         }
         return $file->save();
     }

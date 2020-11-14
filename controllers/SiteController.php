@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\FileSearch;
+use app\models\Row;
+use app\models\RowSearch;
+use app\models\UserSearch;
 use app\security\ForgotForm;
 use app\security\LoginForm;
 use app\security\RegistrationForm;
@@ -156,6 +160,26 @@ class SiteController extends Controller {
         }
         return $this->render('reset-pwd', [
                     'model' => $model,
+        ]);
+    }
+
+    public function actionStats()
+    {
+        $request = Yii::$app->request;
+
+        $userSearchModel = new UserSearch();
+        $userDataProvider = $userSearchModel->search($request->queryParams);
+
+        $fileSearchModel = new FileSearch();
+        $fileDataProvider = $fileSearchModel->search($request->queryParams);
+
+        $rowSearchModel = new RowSearch();
+        $rowDataProvider = $rowSearchModel->search($request->queryParams);
+
+        return $this->render('stats', [
+            'users' => $this->renderPartial('/user/stats', ['searchModel' => $userSearchModel, 'dataProvider' => $userDataProvider]),
+            'files' => $this->renderPartial('/file/stats', ['searchModel' => $fileSearchModel, 'dataProvider' => $fileDataProvider]),
+            'rows' => $this->renderPartial('/row/stats', ['searchModel' => $rowSearchModel, 'dataProvider' => $rowDataProvider]),
         ]);
     }
 

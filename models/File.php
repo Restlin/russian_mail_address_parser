@@ -4,8 +4,8 @@ namespace app\models;
 
 use app\services\FileService;
 use Yii;
+use yii\bootstrap\Html;
 use yii\db\ActiveRecord;
-use app\models\Row;
 
 /**
  * This is the model class for table "file".
@@ -16,6 +16,8 @@ use app\models\Row;
  * @property int $size Размер
  * @property int $status Статус обработки файла
  * @property int $user_id ID Пользователя
+ * @property string $date_start Дата начала парсинга
+ * @property string $date_end Дата завершения парсинга
  *
  * @property Row[] $rows строки файла
  */
@@ -44,6 +46,7 @@ class File extends ActiveRecord {
             [['size', 'status'], 'default', 'value' => null],
             [['size', 'status', 'id'], 'integer'],
             [['name', 'mime'], 'string', 'max' => 255],
+            [['date_start', 'date_end'], 'string'],
         ];
     }
 
@@ -58,6 +61,8 @@ class File extends ActiveRecord {
             'size' => 'Размер',
             'status' => 'Статус обработки файла',
             'user_id' => 'ИД пользователя',
+            'date_start' => 'Дата начала парсинга',
+            'date_end' => 'Дата завершения парсинга',
         ];
     }
 
@@ -119,29 +124,31 @@ class File extends ActiveRecord {
     public function getStatusName(): string
     {
         $statuses = static::getStatuses();
-        return $statuses[$this->status] ?? 'Неверный статус';
+        $status = $statuses[$this->status] ?? 'Неверный статус';
+        return Html::tag('span', $status, ['class' => 'badge']);
     }
 
     /**
+     * @param array $statuses
      * @return int
      */
-    private function getCountCompleteRows(): int
+    public function getCountRowsByStatuses(array $statuses): int
     {
-        return Row::find()->andWhere(['file_id' => $this->id, 'status' => [Row::STATUS_DONE, Row::STATUS_ERROR]])->count();
+        return Row::find()->andWhere(['file_id' => $this->id, 'status' => $statuses])->count();
     }
 
     /**
      * @return int
      */
-    private function getCountAllRows(): int
+    public function getCountAllRows(): int
     {
         return Row::find()->andWhere(['file_id' => $this->id])->count();
     }
 
     public function getProgress(): int
     {
-        if ($this->getCountAllRows() && $this->getCountCompleteRows()) {
-            return floor(($this->getCountCompleteRows() / $this->getCountAllRows()) * 100);
+        if ($this->getCountAllRows() && $this->getCountRowsByStatuses([Row::STATUS_DONE, Row::STATUS_ERROR])) {
+            return floor(($this->getCountRowsByStatuses([Row::STATUS_DONE, Row::STATUS_ERROR]) / $this->getCountAllRows()) * 100);
         }
         return 0;
     }

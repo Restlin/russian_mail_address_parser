@@ -2,9 +2,9 @@
 
 namespace app\models;
 
-use app\models\File;
 use app\services\FileService;
 use Yii;
+use yii\bootstrap\Html;
 
 /**
  * This is the model class for table "row".
@@ -106,6 +106,7 @@ class Row extends \yii\db\ActiveRecord
     public function getStatusName(): string
     {
         $statuses = static::getStatuses();
-        return $statuses[$this->status] ?? 'Неверный статус';
+        $status = $statuses[$this->status] ?? 'Неверный статус';
+        return Html::tag('span', $status, ['class' => 'badge']);
     }
 }

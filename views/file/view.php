@@ -5,6 +5,7 @@ use app\models\File;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\web\YiiAsset;
+use app\models\Row;
 
 /* @var $this View */
 /* @var $model File */
@@ -36,10 +37,26 @@ YiiAsset::register($this);
             'id',
             'name',
             'mime',
-            'size',
+            [
+                'attribute' => 'size',
+                'value' => Yii::$app->formatter->asShortSize($model->size),
+            ],
             [
                 'attribute' => 'status',
                 'value' => $model->getStatusName(),
+                'format' => 'html',
+            ],
+            [
+                'label' => 'Количество строк',
+                'value' => $model->getCountAllRows(),
+            ],
+            [
+                'label' => 'Количество успешно обработанных строк',
+                'value' => $model->getCountRowsByStatuses([Row::STATUS_DONE]),
+            ],
+            [
+                'label' => 'Количество ошибок',
+                'value' => $model->getCountRowsByStatuses([Row::STATUS_ERROR]),
             ],
         ],
     ]) ?>
