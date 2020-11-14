@@ -44,7 +44,6 @@ $this->title = 'Обработанные строки';
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'file_id',
             'content:ntext',
             'address_base:ntext',
             'address_new:ntext',
