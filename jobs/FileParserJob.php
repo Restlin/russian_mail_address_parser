@@ -37,7 +37,7 @@ class FileParserJob  extends \yii\base\BaseObject implements \yii\queue\JobInter
                 $encoding = $this->getEncoding($filepath);
                 if(!$encoding) {
                     $file->status = File::STATUS_WRONG_ENCODING;
-                    $file->date_end = new DateTime();
+                    $file->date_end = (new DateTime())->format('d.m.Y H:i:s');
                 } elseif($encoding != 'utf-8') {
                     $tmppath = "/tmp/$file->id.csv";
                     exec("iconv -f $encoding -t utf-8 $filepath -o $tmppath");
