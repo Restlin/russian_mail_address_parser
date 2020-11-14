@@ -18,6 +18,13 @@ use yii\widgets\ActiveForm;
  */
 class UserController extends Controller {
 
+    private ?User $user = null;
+
+    public function __construct($id, $module, $config = []) {
+        $this->user = Yii::$app->user->getIsGuest() ? null : Yii::$app->user->identity->getUser();
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -27,6 +34,26 @@ class UserController extends Controller {
                 'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['profile-form', 'view', 'change-pwd', 'change-pwd-validate'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['index', 'update', 'delete', 'create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => fn() => $this->user && $this->user->isAdmin,
+                    ],
+                    [
+                        'actions' => ['confirm', 'registration-success'],
+                        'allow' => true,
+                    ],
                 ],
             ],
         ];
