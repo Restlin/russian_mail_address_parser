@@ -7,19 +7,17 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use app\security\LoginForm;
 
-class SiteController extends Controller
-{
+class SiteController extends Controller {
+
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout'],
                 'rules' => [
                     [
@@ -30,7 +28,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -41,8 +39,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function actions()
-    {
+    public function actions() {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -59,8 +56,7 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         return $this->redirect(['file/index']); //@todo подумать над центральной страницей
         //return $this->render('index');
     }
@@ -70,8 +66,7 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionLogin()
-    {
+    public function actionLogin() {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -83,7 +78,7 @@ class SiteController extends Controller
 
         $model->password = '';
         return $this->render('login', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -92,38 +87,72 @@ class SiteController extends Controller
      *
      * @return Response
      */
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
 
     /**
-     * Displays contact page.
+     * Displays policy page.
      *
-     * @return Response|string
+     * @return string
      */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
+    public function actionAgreement() {
+        if (Yii::$app->getRequest()->getIsAjax()) {
+            return $this->renderAjax('agreement', [
+                        'button' => '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
+            ]);
+        } else {
+            return $this->render('agreement', [
+                        'button' => ''
+            ]);
         }
-        return $this->render('contact', [
-            'model' => $model,
+    }
+
+    /**
+     * Регистрация пользователя
+     */
+    public function actionRegistration() {
+        $model = Yii::$container->get(RegistrationForm::class);
+        if ($model->load(Yii::$app->request->post()) && $model->register()) {
+            return $this->redirect(['/user/confirm', 'id' => $model->getUser()->id]);
+        }
+
+        return $this->render('registration', [
+                    'model' => $model,
         ]);
     }
 
     /**
-     * Displays about page.
-     *
-     * @return string
+     * Забыл пароль
      */
-    public function actionAbout()
-    {
-        return $this->render('about');
+    public function actionForgot() {
+        $model = Yii::$container->get(ForgotForm::class);
+        if ($model->load(Yii::$app->request->post()) && $model->restore()) {
+            return $this->render('forgot-send');
+        }
+        return $this->render('forgot', [
+                    'model' => $model,
+        ]);
     }
+
+    /**
+     * Сброс паролья
+     */
+    public function actionResetPwd(string $token) {
+        $user = $this->userRepository->findOneByResetToken($token);
+        if ($user === null || ($user && $user->pwd_reset_token_unixtime > time() + Yii::$app->params['tokenLive'])) {
+            throw new NotFoundHttpException('Указанный вами токен не действителен!');
+        }
+        $model = new ResetPwdForm();
+        $model->user = $user;
+        if ($model->load(Yii::$app->request->post()) && $model->setNewPwd()) {
+            return $this->redirect(['/site/login']);
+        }
+        return $this->render('reset-pwd', [
+                    'model' => $model,
+        ]);
+    }
+
 }

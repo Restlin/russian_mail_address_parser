@@ -2,103 +2,73 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
-{
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
+use Yii;
 
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
+/**
+ * This is the model class for table "user".
+ *
+ * @property int $id ИД
+ * @property string $surname Фамилия
+ * @property string $name Имя
+ * @property string|null $patronymic Отчество
+ * @property string $phone Телефон
+ * @property string $email Email
+ * @property string|null $no_confirm_email Не подтверждённый email
+ * @property string|null $email_code Код подтверждения Email
+ * @property int|null $email_code_unixtime Время генерации кода
+ * @property string|null $password_hash Хеш пароля
+ * @property string|null $pwd_reset_token Токен для сброса пароля
+ * @property int|null $pwd_reset_token_unixtime Время жизни токена сброса пароля
+ * @property bool $active Активирован
+ * @property bool $isAdmin Признак администратора
+ */
+class User extends \yii\db\ActiveRecord {
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
-    {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+    public static function tableName() {
+        return 'user';
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+    public function rules() {
+        return [
+            [['surname', 'name', 'phone', 'email'], 'required'],
+            [['email_code_unixtime', 'pwd_reset_token_unixtime'], 'integer'],
+            [['active', 'isAdmin'], 'boolean'],
+            [['surname', 'name', 'patronymic', 'email', 'no_confirm_email'], 'string', 'max' => 50],
+            [['phone'], 'string', 'max' => 20],
+            [['email_code'], 'string', 'max' => 6],
+            [['password_hash'], 'string', 'max' => 64],
+            [['pwd_reset_token'], 'string', 'max' => 32],
+            [['email'], 'unique'],
+            [['phone'], 'unique'],
+        ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId()
-    {
-        return $this->id;
+    public function attributeLabels() {
+        return [
+            'id' => 'ИД',
+            'surname' => 'Фамилия',
+            'name' => 'Имя',
+            'patronymic' => 'Отчество',
+            'phone' => 'Телефон',
+            'email' => 'Email',
+            'no_confirm_email' => 'Не подтверждённый email',
+            'email_code' => 'Код подтверждения Email',
+            'email_code_unixtime' => 'Время генерации кода',
+            'password_hash' => 'Хеш пароля',
+            'pwd_reset_token' => 'Токен для сброса пароля',
+            'pwd_reset_token_unixtime' => 'Время жизни токена сброса пароля',
+            'active' => 'Активирован',
+            'isAdmin' => 'Признак администратора',
+        ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
-
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return $this->password === $password;
-    }
 }

@@ -1,7 +1,15 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'tokenLive' => 900,
+    'adminUser' => [
+        'email' => 'admin@bimit.ru',
+        'name' => 'Админ',
+        'surname' => 'Админов',
+        'patronymic' => 'Админович',
+        'phone' => '+79100000000',
+        'active' => true,
+        'isAdmin' => true,
+        'password' => 'xt,ehfirf',
+    ],
 ];
