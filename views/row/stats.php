@@ -11,3 +11,5 @@ use yii\data\ActiveDataProvider;
 ?>
 
 <h3>Количество строк: <?= $dataProvider->totalCount?></h3>
+
+<h3>Среднее время обработки файла: <?= $searchModel->getAvgSpeed() ?> сек.</h3>

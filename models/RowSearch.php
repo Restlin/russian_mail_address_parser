@@ -90,4 +90,17 @@ class RowSearch extends Row
 
         return $dataProvider;
     }
+
+    public function getAvgSpeed()
+    {
+        $connection = \Yii::$app->db;
+        $command = $connection->createCommand("select avg(t.tm) from (
+            select count(row.*) / extract('epoch' from age(file.date_end, file.date_start)) tm
+            from row
+            join file on file.id = row.file_id
+            group by file.id
+        ) t");
+        $result = $command->queryOne();
+        return $result['avg'] ?? 0;
+    }
 }

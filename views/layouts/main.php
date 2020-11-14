@@ -42,9 +42,9 @@ AppAsset::register($this);
                 $items[] = ['label' => 'Регистрация', 'url' => ['/site/registration']];
                 $items[] = ['label' => 'Войти', 'url' => ['/site/login']];
             } else {
-                /*if ($user->isAdmin) {
+                if ($user->isAdmin) {
                     $items[] = ['label' => 'Статистика', 'url' => ['site/stats']];
-                }*/
+                }
                 $items[] = ['label' => 'Выход (' . $user->surname . ' ' . $user->name . ')', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post', 'title' => 'Выход']];
             }
             echo Nav::widget([
