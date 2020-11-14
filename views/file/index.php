@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\bootstrap\Modal;
 use restlin\pjaxindicator\PjaxIndicator as Pjax;
 use kartik\export\ExportMenu;
+use app\models\File;
 
 /* @var $this View */
 /* @var $searchModel FileSearch */
@@ -67,12 +68,25 @@ $this->registerJs("
             [
                 'class' => yii\grid\SerialColumn::class
             ],
-            'name',
+            [
+                'attribute' => 'name',
+                'value' => function (File $model) {
+                    return in_array($model->status, [File::STATUS_NONE, File::STATUS_WORK]) ? $model->name : Html::a($model->name, ['view', 'id' => $model->id]);
+                },
+                'format' => 'html',
+            ],
             'size',
             'status',
             [
+                'attribute' => 'status',
+                'filter' => File::getStatuses(),
+                'value' => function (File $model) {
+                    return $model->getStatusName();
+                },
+            ],
+            [
                 'class' => yii\grid\ActionColumn::class,
-                'template' => '{view} {delete}'
+                'template' => '{delete}'
             ],
         ],
     ]);

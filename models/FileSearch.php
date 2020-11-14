@@ -5,6 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\File;
+use yii\data\Sort;
 
 /**
  * FileSearch represents the model behind the search form of `app\models\File`.
@@ -41,8 +42,16 @@ class FileSearch extends File {
 
         // add conditions that should always apply here
 
+        $sort = new Sort([
+            'attributes' => [
+                'id', 'size', 'status', 'user_id', 'name', 'mime'
+            ],
+            'defaultOrder' => ['id' => SORT_DESC],
+        ]);
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => $sort,
         ]);
 
         $this->load($params);

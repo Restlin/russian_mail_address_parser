@@ -5,6 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Row;
+use yii\data\Sort;
 
 /**
  * RowSearch represents the model behind the search form of `app\models\Row`.
@@ -43,9 +44,14 @@ class RowSearch extends Row
         $query = Row::find();
 
         // add conditions that should always apply here
+        $sort = new Sort([
+            'attributes' => ['id', 'file_id', 'status', 'content', 'address_base', 'address_new'],
+            'defaultOrder' => ['id' => SORT_DESC],
+        ]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => $sort,
         ]);
 
         $this->load($params);
