@@ -23,29 +23,31 @@ $clone->pagination = false;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-    <?= ExportMenu::widget([
-        'dataProvider' => $clone,
-        'exportConfig' => [
-            ExportMenu::FORMAT_HTML => false,
-            ExportMenu::FORMAT_TEXT => false,
-            ExportMenu::FORMAT_PDF => false,
-            ExportMenu::FORMAT_EXCEL => false,
-            /*ExportMenu::FORMAT_CSV => false,*/
-            ExportMenu::FORMAT_EXCEL_X => [
-                'label' => 'XLSX',
+        <?=
+        ExportMenu::widget([
+            'dataProvider' => $clone,
+            'exportConfig' => [
+                ExportMenu::FORMAT_HTML => false,
+                ExportMenu::FORMAT_TEXT => false,
+                ExportMenu::FORMAT_PDF => false,
+                ExportMenu::FORMAT_EXCEL => false,
+                /* ExportMenu::FORMAT_CSV => false, */
+                ExportMenu::FORMAT_EXCEL_X => [
+                    'label' => 'XLSX',
                 //'batchSize' => $dataProvider->pagination->pageSize,
+                ],
             ],
-        ],
-    ]); ?>
+        ]);
+        ?>
     </p>
 
     <?php Pjax::begin(['id' => 'grid-view-rows']); ?>
 
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-
             'id',
             'content:ntext',
             'address_base:ntext',
@@ -53,18 +55,21 @@ $clone->pagination = false;
             [
                 'attribute' => 'status',
                 'filter' => Row::getStatuses(),
-                'value' => function (Row $model) {
-                    return $model->getStatusName();
-                },
+                'value' => fn(Row $model) => $model->getStatusName(),
             ],
-
             [
-                'class' => 'yii\grid\ActionColumn',
+                'class' => yii\grid\ActionColumn::class,
                 'controller' => 'row',
-                'template' => '{update}',
+                'template' => '{resend} {update}',
+                'buttons' => [
+                    'resend' => function($url, Row $model, $key) {
+                        return Html::a('', ['/row/resend', 'id' => $model->id], ['class' => 'glyphicon glyphicon-repeat']);
+                    },
+                ]
             ],
         ],
-    ]); ?>
+    ]);
+    ?>
 
     <?php Pjax::end(); ?>
 
