@@ -4,6 +4,7 @@ namespace app\jobs;
 
 use app\models\Row;
 use app\services\PostApiService;
+use app\helpers\AddressHelper;
 use Yii;
 
 /**
@@ -21,13 +22,15 @@ class RowParserJob extends \yii\base\BaseObject implements \yii\queue\JobInterfa
 
     public function execute($queue) {
         $row = Row::findOne($this->rowId);
+        $addressParts = []; //@todo сюда получить словарик токенов для адреса
+        $row->address_base = AddressHelper::findAddress($row->content, $addressParts);
         if (!$row || $row->address_base === null) {
             return false;
         }
         /* @var $service PostApiService */
         $service = Yii::$container->get(PostApiService::class);
         $data = $service->checkAddress($row);
-        if ($this->cheskData($data)) {
+        if ($this->checkData($data)) {
             $row->address_new = $data['addr']['outaddr'];
             $row->status = Row::STATUS_DONE;
         } else {
@@ -36,7 +39,7 @@ class RowParserJob extends \yii\base\BaseObject implements \yii\queue\JobInterfa
         $row->save();
     }
 
-    protected function cheskData(array $data): bool {
+    protected function checkData(array $data): bool {
         $result = false;
         $state = null;
         if (key_exists('state', $data)) {
