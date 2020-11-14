@@ -37,7 +37,7 @@ class User extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['surname', 'name', 'email', 'phone'], 'required'],
+            [['surname', 'name', 'email'], 'required'],
             [['email_code_unixtime', 'pwd_reset_token_unixtime'], 'integer'],
             [['active', 'isAdmin'], 'boolean'],
             [['surname', 'name', 'patronymic', 'email', 'no_confirm_email'], 'string', 'max' => 50],
