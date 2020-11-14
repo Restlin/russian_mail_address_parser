@@ -14,6 +14,8 @@ use restlin\pjaxindicator\PjaxIndicator as Pjax;
 
 $this->title = 'Обработанные строки';
 //$this->params['breadcrumbs'][] = $this->title;
+$clone = clone $dataProvider;
+$clone->pagination = false;
 ?>
 <div class="row-index">
 
@@ -21,7 +23,7 @@ $this->title = 'Обработанные строки';
 
     <p>
     <?= ExportMenu::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $clone,
         'exportConfig' => [
             ExportMenu::FORMAT_HTML => false,
             ExportMenu::FORMAT_TEXT => false,
@@ -30,6 +32,7 @@ $this->title = 'Обработанные строки';
             /*ExportMenu::FORMAT_CSV => false,*/
             ExportMenu::FORMAT_EXCEL_X => [
                 'label' => 'XLSX',
+                //'batchSize' => $dataProvider->pagination->pageSize,
             ],
         ],
     ]); ?>

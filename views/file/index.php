@@ -22,6 +22,8 @@ $this->registerJs("
         $.pjax.reload({container: '#grid-view-files'});
     });
 ");
+$clone = clone $dataProvider;
+$clone->pagination = false;
 ?>
 <div class="file-index">
 
@@ -44,7 +46,7 @@ $this->registerJs("
     </p>
 
     <?= ExportMenu::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $clone,
         'exportConfig' => [
             ExportMenu::FORMAT_HTML => false,
             ExportMenu::FORMAT_TEXT => false,
