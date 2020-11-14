@@ -49,7 +49,11 @@ $this->title = 'Обработанные строки';
             'address_new:ntext',
             'status',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'controller' => 'row',
+                'template' => '{update}',
+            ],
         ],
     ]); ?>
 
