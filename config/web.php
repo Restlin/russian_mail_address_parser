@@ -12,7 +12,9 @@ $cookiesParams = [
 
 $config = [
     'id' => 'basic',
+    'name' => 'Адреса друзей по переписке',
     'language' => 'ru',
+    'sourceLanguage' => 'en',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'container' => $container,
