@@ -20,7 +20,7 @@ class m201113_193940_create_row extends Migration
             'address_new' => $this->text()->Null()->comment('Адрес после обработки'),
             'status' => $this->integer()->notNull()->defaultValue(0)->comment('Статус обработки'),
         ]);
-        $this->addForeignKey('row_file_id_fk', 'row', 'file_id', 'file', 'id');
+        $this->addForeignKey('row_file_id_fk', 'row', 'file_id', 'file', 'id', 'cascade', 'cascade');
         $this->createIndex('row_file_id_idx', 'row', 'file_id');
     }
 
@@ -30,5 +30,5 @@ class m201113_193940_create_row extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%row}}');
-    }    
+    }
 }
