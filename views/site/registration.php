@@ -34,7 +34,7 @@ $this->title = 'Регистрация';
                 'class' => 'fieldin',
                 'autocomplete' => 'new-password'
             ]
-        ])
+        ])->label('Номер телефона *')
         ?>
         <?= $form->field($model, 'password')->passwordInput()->label($model->getAttributeLabel('password') . ' *') ?>
         <?= $form->field($model, 'password_confirm')->passwordInput()->label($model->getAttributeLabel('password_confirm') . ' *') ?>
@@ -43,7 +43,7 @@ $this->title = 'Регистрация';
         Поля, отмеченные звездочкой (*), обязательны для заполнения.
     </div>
     <div class="column">
-        <?= Html::submitButton('Зарегистрироваться') ?>
+        <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success']) ?>
     </div>
     <div class="column">
         <?= Html::a('У меня уже есть аккаунт, войти под ним', ['/site/login']) ?>
