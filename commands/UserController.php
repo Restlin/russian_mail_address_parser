@@ -8,7 +8,9 @@
 
 namespace app\commands;
 
+use app\models\Row;
 use app\models\User;
+use app\services\PostApiService;
 use Yii;
 use yii\console\Controller;
 use yii\db\Exception;
@@ -35,6 +37,23 @@ class UserController extends Controller {
         $user->setAttributes($params['adminUser']);
         $user->password_hash = Yii::$app->security->generatePasswordHash($params['adminUser']['password']);
         $user->save();
+    }
+
+    public function actionTest() {
+        $rows = Row::find()->where(['is not', 'address_base', null])->all();
+        $postApiService = new PostApiService();
+        foreach ($rows as $row) {
+            if ($row->address_base) {
+                $data = $postApiService->checkAddress($row);
+                var_dump($data['state']);
+                if (key_exists('missing', $data['addr'])) {
+                    var_dump($data['addr']['missing']);
+                }
+                if (key_exists('accuracy', $data['addr'])) {
+                    var_dump($data['addr']['accuracy']);
+                }
+            }
+        }
     }
 
 }

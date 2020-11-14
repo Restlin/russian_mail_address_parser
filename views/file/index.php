@@ -39,7 +39,7 @@ $this->registerJs("
     ?>
 
     <?php Pjax::begin(['id' => 'grid-view-files']); ?>
-
+    <br>
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,

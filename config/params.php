@@ -12,4 +12,5 @@ return [
         'isAdmin' => true,
         'password' => 'xt,ehfirf',
     ],
+    'token' => '53fb9daa-7f06-481f-aad6-c6a7a58ec0bb',
 ];
