@@ -87,7 +87,7 @@ class FileController extends Controller {
         if ($model->user_id != $this->user->id) {
             throw new ForbiddenHttpException('У Вас нет доступа к указанному файлу!');
         }
-        $searchModel = new RowSearch();
+        $searchModel = new RowSearch(['file_id' => $model->id]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('view', [
             'model' => $model,
