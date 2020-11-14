@@ -7,6 +7,7 @@ use app\models\UserSearch;
 use app\security\ChangePwdForm;
 use app\security\EmailConfirmForm;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
