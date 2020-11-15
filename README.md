@@ -1,10 +1,24 @@
 <p align="center">
-    <h1 align="center">TITLE</h1>
+    <h1 align="center">Адреса друзей по переписке</h1>
     <br>
 </p>
 
 <h3>Кейс</h3>
-<p>Разработка веб-ресурса по проверке и преобразованию к специфицированному формату (нормализации) адресных баз данных представленных в виде файлов csv или xlsx</p>
+<p>Прототип сервиса разработан в рамках хакатона Северо-Западного IT-хаба по кейсу Почты России</p>
+<p>Сервис предоставляет возможность проверить и нормализовать адресные базы данных пользователей в виде файлов csv или xlsx</p>
+
+<h4>Реализованный функционал</h4>
+<ul>
+    <li>регистрация пользователя</li>
+    <li>авторизация пользователя</li>
+    <li>загрузка файлов пользователем и их автоматическая обработка</li>
+    <li>отслеживание прогресса обработки файлов</li>
+    <li>просмотр результатов обработки и построчное редактирование адресной базы</li>
+    <li>статистика по работе сервиса</li>
+</ul>
+<h4>Демо</h4>
+<p>Демо сервиса доступно по адресу: http://restlin.keenetic.link:10080 </p>
+<p>Реквизиты тестового пользователя: email: testuser@test.ru, пароль: testuser</p>
 
 [![Issues](https://img.shields.io/github/issues/Restlin/russian_mail_address_parser)](https://github.com/Restlin/russian_mail_address_parser/issues)
 [![Stars](https://img.shields.io/github/stars/Restlin/russian_mail_address_parser)](https://github.com/Restlin/russian_mail_address_parser/stargazers)
