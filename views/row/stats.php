@@ -12,4 +12,4 @@ use yii\data\ActiveDataProvider;
 
 <h3>Количество строк: <?= $dataProvider->totalCount?></h3>
 
-<h3>Скорость обработки: <?= $searchModel->getAvgSpeed() ?> строки/секунда</h3>
+<h3>Скорость обработки: <?= $searchModel->getAvgSpeed() ?> строк/секунда</h3>
