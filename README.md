@@ -40,33 +40,33 @@
 [![Stars](https://img.shields.io/github/stars/Restlin/russian_mail_address_parser)](https://github.com/Restlin/russian_mail_address_parser/stargazers)
 [![License](https://img.shields.io/github/license/Restlin/russian_mail_address_parser)](https://github.com/Restlin/russian_mail_address_parser/blob/master/LICENSE.md)
 
-СТРУКТУРА ДИРЕКТОРИЙ
--------------------
-
-      assets/             contains assets definition
-      commands/           contains console commands (controllers)
-      config/             contains application configurations
-      controllers/        contains Web controller classes
-      mail/               contains view files for e-mails
-      models/             contains model classes
-      runtime/            contains files generated during runtime
-      tests/              contains various tests for the basic application
-      vendor/             contains dependent 3rd-party packages
-      views/              contains view files for the Web application
-      web/                contains the entry script and Web resources
-
 
 
 ТРЕБОВАНИЯ
 ------------
-
-....
+1) развертывание сервиса производится на debian-like linux;
+2) требуется установленный web-сервер с поддержкой PHP(версия 7.4+) интерпретации (apache, nginx);
+3) требуется установленная СУБД PostgreSQL(версия 12+);
+4) требуется установленный пакет xlsx2csv для работы с файлами xlsx;
 
 
 УСТАНОВКА
 ------------
-### Нужен xlsx2csv
-apt-get install xlsx2csv
+### Установка пакета xlsx2csv
+
+Выполните sudo apt-get install xlsx2csv
+### База данных PostgreSQL
+
+Необходимо создать пустую базу данных PostgreSQL, а подключение к базе прописать в конфигурационный файл сервиса по адресу: папка_сервиса/config/db.php
+### Выполнение миграций
+
+Для заполнения базы данных системной информацией выполните в корневой папке сервиса: ./yii migrate и согласитесь с запросом
+### Запуск очередей
+
+Для запуска очередей обработки выполните в корневой папке сервиса: ./yii queue/listen & столько раз, сколько демонов обработки вы хотите
+### Веб-сервер
+
+Настройте ваш веб-сервер так, чтобы папка_сервиса/web была доступна через веб-сервер
 
 ### Установка зависимостей проекта
 
