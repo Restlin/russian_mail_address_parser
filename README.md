@@ -19,12 +19,12 @@
 </ul>
 <h4>Демо</h4>
 <p>Демо сервиса доступно по адресу: http://restlin.keenetic.link:10080 </p>
-<p>Реквизиты тестового пользователя: email: testuser@test.ru, пароль: testuser</p>
+<p>Реквизиты тестового пользователя: email: <b>testuser@test.ru</b>, пароль: <b>testuser</b></p>
 
 <h4>Как пользоваться сервисом</h4>
 
 <h5>Вход в систему</h5>
-<p>Любой человек может войти в систему под тестовым пользователем testuser@test.ru с паролем testuser на <a href="http://restlin.keenetic.link:10080/index.php?r=site%2Flogin">странице авторизации.</a></p>
+<p>Любой человек может войти в систему под тестовым пользователем <b>testuser@test.ru</b> с паролем <b>testuser</b> на <a href="http://restlin.keenetic.link:10080/index.php?r=site%2Flogin">странице авторизации.</a></p>
 
 <h5>Регистрация</h5>
 <p>Если тестовый пользователь не вариант, то можно зарегистрировать собственную учетную запись на <a href="http://restlin.keenetic.link:10080/index.php?r=site%2Fregistration">странице регистрации.</a> и подтвердить ее email.</p>
